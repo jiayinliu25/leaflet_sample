@@ -214,7 +214,7 @@
       var wms_buildings_4 = new L.tileLayer.wms(
         "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
         {
-          layers: "Charlotte:Buildings",
+          layers: "Charlotte:Buildings_housingCondition",
           format: "image/png",
           transparent: true,
           CQL_FILTER: "Housing_co = 'Dilapidated'"
@@ -224,7 +224,7 @@
       var wms_buildingm = new L.tileLayer.wms(
         "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
         {
-          layers: "Charlotte:Buildings",
+          layers: "Charlotte:Buildings_housingCondition",
           format: "image/png",
           transparent: true,
           CQL_FILTER: "Housing_co = 'Major Repair'"
@@ -233,7 +233,7 @@
       var wms_buildingmi = new L.tileLayer.wms(
         "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
         {
-          layers: "Charlotte:Buildings",
+          layers: "Charlotte:Buildings_housingCondition",
           format: "image/png",
           transparent: true,
           CQL_FILTER: "Housing_co = 'Minor Repair'"
@@ -242,7 +242,7 @@
       var wms_buildingss = new L.tileLayer.wms(
         "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
         {
-          layers: "Charlotte:Buildings",
+          layers: "Charlotte:Buildings_housingCondition",
           format: "image/png",
           transparent: true,
           CQL_FILTER: "Housing_co = 'Standard'"
