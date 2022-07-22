@@ -1,2 +1,2 @@
-# leaflet_sample
+# openlayer_test
 Created with CodeSandbox

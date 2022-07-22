@@ -1,0 +1,13 @@
+{
+  "name": "wms-tiled",
+  "dependencies": {
+    "leaflet": "1.8.0"
+  },
+  "devDependencies": {
+    "parcel": "^2.0.0"
+  },
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build --public-url . index.html"
+  }
+}
