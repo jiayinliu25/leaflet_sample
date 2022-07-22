@@ -22,6 +22,14 @@
         width: 100%;
         height: 500px;
       }
+      #map3 {
+        width: 100%;
+        height: 500px;
+      }
+      #map4 {
+        width: 100%;
+        height: 500px;
+      }
     </style>
   </head>
   <body>
@@ -40,6 +48,14 @@
     <div class="map" id="map2"></div>
     <input id="range" class="range" type="range" min="0" max="1.0" step="any" />
 
+    <div class="map" id="map3"></div>
+
+    <div class="map" id="map4"></div>
+    <form>
+      Housing Condition:<br />
+      <input type="text" id="myInput" />
+      <input type="button" value="Update" onclick="updateParams()" />
+    </form>
     <script>
       var map = L.map("map", {
         center: [35.219, -80.839],
@@ -102,7 +118,7 @@
         center: [35.219, -80.839],
         zoom: 17
       });
-      L.tileLayer(
+      var osm2 = L.tileLayer(
         "https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=PPplib6pjH9Uo90NGbF4"
       ).addTo(map2);
 
@@ -112,7 +128,7 @@
           layers: "Charlotte:jcsured0102bk03_ST_4"
         }
       ).addTo(map2);
-      var wms_blocks = new L.tileLayer.wms(
+      var wms_blocks_2 = new L.tileLayer.wms(
         "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
         {
           layers: "Charlotte:Blocks",
@@ -121,7 +137,7 @@
           opacity: 0.3
         }
       ).addTo(map2);
-      var wms_buildings = new L.tileLayer.wms(
+      var wms_buildings_2 = new L.tileLayer.wms(
         "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
         {
           layers: "Charlotte:Buildings",
@@ -143,7 +159,76 @@
       range["oninput" in range ? "oninput" : "onchange"] = clip;
       map2.on("move", clip);
       map2.setView([35.219, -80.839], 17);
+      //layer control for map 2
+      var overlayMap = {
+        Blocks: wms_blocks_2,
+        Buildings: wms_buildings_2
+      };
+
+      var layerControl = L.control.layers().addTo(map2);
+      layerControl.addOverlay(wms_buildings_2, "Buildings");
+      layerControl.addOverlay(wms_blocks_2, "blocks");
+
       clip();
+
+      //map 3 - colored map
+      var map3 = L.map("map3", {
+        center: [35.219, -80.839],
+        zoom: 17
+      });
+      var osm3 = L.tileLayer(
+        "https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=PPplib6pjH9Uo90NGbF4"
+      ).addTo(map3);
+      var wms_blocks_3 = new L.tileLayer.wms(
+        "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
+        {
+          layers: "Charlotte:Blocks",
+          format: "image/png",
+          transparent: true,
+          opacity: 0.5
+        }
+      ).addTo(map3);
+      var wms_buildings_3 = new L.tileLayer.wms(
+        "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
+        {
+          layers: "Charlotte:Buildings_color",
+          format: "image/png",
+          transparent: true
+        }
+      ).addTo(map3);
+      //map 4 -CQL filter
+      var map4 = L.map("map4", {
+        center: [35.219, -80.839],
+        zoom: 17
+      });
+      var osm4 = L.tileLayer(
+        "https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=PPplib6pjH9Uo90NGbF4"
+      ).addTo(map4);
+      var wms_blocks_4 = new L.tileLayer.wms(
+        "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
+        {
+          layers: "Charlotte:Blocks",
+          format: "image/png",
+          transparent: true,
+          opacity: 0.5
+        }
+      ).addTo(map4);
+      var wms_buildings_4 = new L.tileLayer.wms(
+        "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
+        {
+          layers: "Charlotte:Buildings",
+          format: "image/png",
+          transparent: true
+        }
+      );
+      wms_buildings_4.setParams({ CQL_FILTER: "Housing_co = 'Major Repair'" });
+
+      function updateParams() {
+        var x = document.getElementById("myInput");
+        var filter = "Housing_co ='" + x + "'";
+        return wms_buildings_4.setParams({ CQL_FILTER: filter });
+      }
+      wms_buildings_4.addTo(map4);
     </script>
   </body>
 </html>
