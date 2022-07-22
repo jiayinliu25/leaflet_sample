@@ -9,6 +9,8 @@
       href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
     />
     <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+
+    ></script>
     <style>
       body {
         margin: 0;
@@ -35,27 +37,23 @@
   <body>
     <style>
       .range {
-        position: absolute;
+        position: relative;
         width: 100%;
       }
       .leaflet-top .leaflet-control-zoom {
         top: 20px;
       }
     </style>
-
+    Map 1: Toggle multiple Layers
     <div id="map"></div>
-
+    Map 2: Layer Swipe
     <div class="map" id="map2"></div>
     <input id="range" class="range" type="range" min="0" max="1.0" step="any" />
-
+    Map 3: Colored Layer with QGIS
     <div class="map" id="map3"></div>
-
+    
+    Map 4: Toggle Feature Classes
     <div class="map" id="map4"></div>
-    <form>
-      Housing Condition:<br />
-      <input type="text" id="myInput" />
-      <input type="button" value="Update" onclick="updateParams()" />
-    </form>
     <script>
       var map = L.map("map", {
         center: [35.219, -80.839],
@@ -218,17 +216,49 @@
         {
           layers: "Charlotte:Buildings",
           format: "image/png",
-          transparent: true
+          transparent: true,
+          CQL_FILTER: "Housing_co = 'Dilapidated'"
         }
       );
-      wms_buildings_4.setParams({ CQL_FILTER: "Housing_co = 'Major Repair'" });
-
-      function updateParams() {
-        var x = document.getElementById("myInput");
-        var filter = "Housing_co ='" + x + "'";
-        return wms_buildings_4.setParams({ CQL_FILTER: filter });
-      }
-      wms_buildings_4.addTo(map4);
+      //wms_buildings_4.setParams({ CQL_FILTER: "Housing_co = 'Dilapidated'" });
+      var wms_buildingm = new L.tileLayer.wms(
+        "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
+        {
+          layers: "Charlotte:Buildings",
+          format: "image/png",
+          transparent: true,
+          CQL_FILTER: "Housing_co = 'Major Repair'"
+        }
+      );
+      var wms_buildingmi = new L.tileLayer.wms(
+        "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
+        {
+          layers: "Charlotte:Buildings",
+          format: "image/png",
+          transparent: true,
+          CQL_FILTER: "Housing_co = 'Minor Repair'"
+        }
+      );
+      var wms_buildingss = new L.tileLayer.wms(
+        "http://virtualblackcharlotte.net/geoserver/Charlotte/wms",
+        {
+          layers: "Charlotte:Buildings",
+          format: "image/png",
+          transparent: true,
+          CQL_FILTER: "Housing_co = 'Standard'"
+        }
+      );
+      var overlays4 = {
+        Dilapidated: wms_buildings_4,
+        Major_Repair: wms_buildingm,
+        Minor_Repair: wms_buildingmi,
+        Standard: wms_buildingss
+      };
+      L.control
+        .layers(null, overlays4, {
+          collapsed: false
+        })
+        .addTo(map4);
     </script>
   </body>
 </html>
